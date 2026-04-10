@@ -40,7 +40,6 @@
         /* --- Top Status Bar --- */
         .status-bar {
             display: flex;
-            justify-content: space-between;
             align-items: center;
             width: 100%;
             font-family: 'JetBrains Mono', monospace;
@@ -50,7 +49,6 @@
         }
 
         .status-left { display: flex; align-items: center; gap: 10px; }
-        .status-right { letter-spacing: 2px; text-align: right; }
 
         .pulse {
             width: 8px; height: 8px; background: var(--accent); border-radius: 50%;
@@ -107,7 +105,7 @@
         .good { background: rgba(34, 197, 94, 0.05); border: 1px solid rgba(34, 197, 94, 0.2); }
         .chat-label { font-weight: bold; margin-bottom: 10px; display: block; }
 
-        /* --- Clearance --- */
+        /* --- Sections --- */
         .section-header {
             font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
             color: var(--text-dim); margin: 40px 0 20px 0;
@@ -139,9 +137,6 @@
         <div class="status-left">
             <div class="pulse"></div>
             <span>SYSTEM_LOAD_COMPLETE // NICK_WILDEE_OS</span>
-        </div>
-        <div class="status-right">
-            SERVER_TIME: <span id="server-clock">09:00:00</span>
         </div>
     </div>
 
@@ -183,6 +178,14 @@
     <div class="role-entry"><div><h3>Curator of SIS</h3><span>State Organization</span></div></div>
     <div class="role-entry"><div><h3>Curator of Tambov</h3><span>Crime Organization</span></div></div>
 
+    <div class="section-header">HISTORICAL_RECORDS</div>
+    <div class="role-entry" style="opacity: 0.4;">
+        <div><h3>Senior Curator of Police Department</h3><span>Server 1 Archive</span></div>
+    </div>
+    <div class="role-entry" style="opacity: 0.4;">
+        <div><h3>Administrator</h3><span>Server 1 Archive</span></div>
+    </div>
+
     <div class="verification-bar">
         <div style="font-size: 0.7rem; color: var(--accent); font-family: 'JetBrains Mono'; font-weight: 700;">IDENTITY // AUTHENTIC</div>
         <div class="signature-compact">Nick_Wildee</div>
@@ -208,24 +211,6 @@
         </div>
     </footer>
 </div>
-
-<script>
-    function updateServerTime() {
-        const now = new Date();
-        const hours = "09";
-        const minutes = now.getMinutes().toString().padStart(2, '0');
-        const seconds = now.getSeconds().toString().padStart(2, '0');
-
-        const timeString = `${hours}:${minutes}:${seconds}`;
-        const clockElement = document.getElementById('server-clock');
-        if (clockElement) {
-            clockElement.textContent = timeString;
-        }
-    }
-
-    setInterval(updateServerTime, 1000);
-    updateServerTime();
-</script>
 
 </body>
 </html>
