@@ -61,7 +61,7 @@
         }
 
         /* --- Header --- */
-        header { border-left: 3px solid var(--accent); padding-left: 30px; margin-bottom: 40px; }
+        header { border-left: 3px solid var(--accent); padding-left: 30px; margin-bottom: 30px; }
         h1 {
             font-size: 3.5rem; font-weight: 800; letter-spacing: -2px;
             overflow: hidden; white-space: nowrap; border-right: 3px solid var(--accent);
@@ -70,6 +70,21 @@
         @keyframes typing { from { width: 0 } to { width: 100% } }
         @keyframes blink { from { border-color: transparent } to { border-color: var(--accent) } }
         .title-sub { color: var(--text-dim); font-family: 'JetBrains Mono', monospace; margin-top: 10px; }
+
+        /* --- Activity Log --- */
+        .activity-log {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--success);
+            background: rgba(34, 197, 94, 0.03);
+            border: 1px solid rgba(34, 197, 94, 0.1);
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            display: flex;
+            gap: 10px;
+        }
+        .log-cursor { animation: blink 0.8s infinite; border-left: 6px solid var(--success); margin-left: 5px; }
 
         /* --- Duty Monitor --- */
         .duty-monitor {
@@ -88,8 +103,41 @@
         .duty-grid { display: grid; grid-template-columns: repeat(24, 1fr); gap: 4px; height: 12px; }
         .duty-cell { background: #1a1a1e; border-radius: 1px; transition: 0.3s; }
         .duty-cell.active-high { background: #3b82f6; box-shadow: 0 0 8px var(--accent-glow); }
-        .duty-cell.variable { background: rgba(59, 130, 246, 0.3); animation: flicker 3s infinite; }
-        @keyframes flicker { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+        .duty-cell.variable { background: rgba(59, 130, 246, 0.3); animation: flicker-cell 3s infinite; }
+        @keyframes flicker-cell { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+        /* --- Role Entries with Scanning Micro-Interactions --- */
+        .role-entry {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px; background: rgba(255,255,255,0.01);
+            border: 1px solid var(--border); border-radius: 4px; margin-bottom: 10px;
+            position: relative;
+            overflow: hidden;
+            transition: border 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        }
+
+        .role-entry:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 15px var(--accent-glow);
+            transform: translateX(5px);
+            background: rgba(59, 130, 246, 0.03);
+        }
+
+        .role-entry::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -150%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.15), transparent);
+            transition: 0s;
+        }
+
+        .role-entry:hover::after {
+            left: 150%;
+            transition: 0.8s ease-in-out;
+        }
 
         /* --- Communication Section --- */
         .no-hello-section {
@@ -112,11 +160,6 @@
             display: flex; align-items: center; gap: 15px;
         }
         .section-header::after { content: ""; height: 1px; flex-grow: 1; background: var(--border); }
-        .role-entry {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 20px; background: rgba(255,255,255,0.01);
-            border: 1px solid var(--border); border-radius: 4px; margin-bottom: 10px;
-        }
 
         /* --- Footer --- */
         .verification-bar {
@@ -124,7 +167,26 @@
             border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
             display: flex; justify-content: space-between; align-items: center;
         }
-        .signature-compact { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; font-style: italic; opacity: 0.8; }
+
+        .auth-status {
+            font-size: 0.7rem; color: var(--accent); font-family: 'JetBrains Mono'; font-weight: 700;
+        }
+
+        .digital-sig {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            font-style: italic;
+            color: var(--text);
+            border-right: 2px solid var(--accent);
+            white-space: nowrap;
+            overflow: hidden;
+            width: 0;
+            animation: sig-typing 1.5s steps(11, end) forwards 1s, sig-blink 0.8s infinite;
+        }
+
+        @keyframes sig-typing { from { width: 0 } to { width: 105px } }
+        @keyframes sig-blink { 50% { border-color: transparent } }
+
         footer { margin-top: 40px; padding-bottom: 30px; text-align: center; }
 
         @media (max-width: 600px) { .chat-comparison { grid-template-columns: 1fr; } h1 { font-size: 2.2rem; } }
@@ -136,7 +198,7 @@
     <div class="status-bar">
         <div class="status-left">
             <div class="pulse"></div>
-            <span>SYSTEM_LOAD_COMPLETE // NICK_WILDEE_OS</span>
+            <span>NODE_7_ACTIVE // IRELAND_REGION</span>
         </div>
     </div>
 
@@ -144,6 +206,13 @@
         <h1>Nick_Wildee</h1>
         <p class="title-sub">Server 7 Administrator • Curator of SIS & Tambov</p>
     </header>
+
+    <div class="activity-log">
+        <span id="log-timestamp">2026-04-10 17:03:00</span>
+        <span style="opacity: 0.5;">></span>
+        <span id="log-text">ADMIN_STATUS: Active duty cycle.</span>
+        <span class="log-cursor"></span>
+    </div>
 
     <div class="duty-monitor">
         <div class="duty-header">
@@ -163,20 +232,20 @@
         <h2 style="font-family: 'JetBrains Mono'; font-size: 0.9rem; color: var(--warning); margin-bottom: 10px;">COMMUNICATION_PROTOCOL</h2>
         <div class="chat-comparison">
             <div class="chat-box bad">
-                <span class="chat-label" style="color: var(--error);">❌ SLOW</span>
+                <span class="chat-label" style="color: var(--error);">❌ LAGGED</span>
                 "Hi Nick." <br> [Waiting for Response]
             </div>
             <div class="chat-box good">
-                <span class="chat-label" style="color: var(--success);">✅ OPTIMIZED</span>
-                "Hi Nick, facing issue with..." <br> [Immediate Status: Resolved]
+                <span class="chat-label" style="color: var(--success);">✅ SYNCED</span>
+                "Hi Nick, issue with..." <br> [Immediate Status: Resolved]
             </div>
         </div>
     </div>
 
     <div class="section-header">ACTIVE_CLEARANCE</div>
-    <div class="role-entry"><div><h3>Administrator</h3><span>Server 7</span></div></div>
-    <div class="role-entry"><div><h3>Curator of SIS</h3><span>State Organization</span></div></div>
-    <div class="role-entry"><div><h3>Curator of Tambov</h3><span>Crime Organization</span></div></div>
+    <div class="role-entry"><div><h3>Administrator</h3><span style="color: var(--accent); font-family: 'JetBrains Mono'; font-size: 0.75rem;">Server 7</span></div></div>
+    <div class="role-entry"><div><h3>Curator of SIS</h3><span style="color: var(--accent); font-family: 'JetBrains Mono'; font-size: 0.75rem;">State Organization</span></div></div>
+    <div class="role-entry"><div><h3>Curator of Tambov</h3><span style="color: var(--accent); font-family: 'JetBrains Mono'; font-size: 0.75rem;">Crime Organization</span></div></div>
 
     <div class="section-header">HISTORICAL_RECORDS</div>
     <div class="role-entry" style="opacity: 0.4;">
@@ -187,8 +256,8 @@
     </div>
 
     <div class="verification-bar">
-        <div style="font-size: 0.7rem; color: var(--accent); font-family: 'JetBrains Mono'; font-weight: 700;">IDENTITY // AUTHENTIC</div>
-        <div class="signature-compact">Nick_Wildee</div>
+        <div class="auth-status">IDENTITY // AUTHENTICATING...</div>
+        <div class="digital-sig">Nick_Wildee</div>
     </div>
 
     <footer>
@@ -206,11 +275,41 @@
                 Designed By Nick_Wildee
             </p>
             <p style="font-size: 0.55rem; margin-top: 20px; color: #1a1a1e; font-family: 'JetBrains Mono'; letter-spacing: 3px;">
-                SECURE_NODE_7 // ENCRYPTION_KEY: 73-5F-37-2D-41-44-4D-49-4E-2D-58
+                SECURE_NODE_7 // Current region: Ireland // ENCRYPTION: AES-256
             </p>
         </div>
     </footer>
 </div>
+
+<script>
+    const logMessages = [
+        "ADMIN_STATUS: Active duty cycle.",
+        "Current region: Ireland"
+    ];
+    let msgIndex = 0;
+
+    function updateLog() {
+        msgIndex = (msgIndex + 1) % logMessages.length;
+        document.getElementById('log-text').textContent = logMessages[msgIndex];
+
+        // --- Custom Time Logic (+3 Hours from BD time) ---
+        const now = new Date();
+        // Shift time by +3 hours
+        now.setHours(now.getHours() + 3);
+
+        const ts = now.toISOString().replace('T', ' ').split('.')[0];
+        document.getElementById('log-timestamp').textContent = ts;
+    }
+
+    // Update time and messages every 4 seconds
+    setInterval(updateLog, 4000);
+    // Initial call to set the time correctly on load
+    updateLog();
+
+    setTimeout(() => {
+        document.querySelector('.auth-status').textContent = 'IDENTITY // AUTHENTIC';
+    }, 2500);
+</script>
 
 </body>
 </html>
